@@ -10,6 +10,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { formatDate } from "@/lib/formatDate";
+import Link from "next/link";
 
 // PRD অনুযায়ী Mock Data (লগিন ও ব্যাকএন্ড এপিআই ছাড়া টেস্ট করার জন্য)
 const INITIAL_JOBS = [
@@ -252,12 +253,14 @@ export default function ApplicationsTable({ jobs }) {
                     </td>
                     <td className="px-3 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-                          title="View Details"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
+                        <Link href={`/dashboard/applications/${job._id}`}>
+                          <button
+                            className="p-1.5 cursor-pointer rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                            title="View Details"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                        </Link>
                         <button
                           className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
                           title="Edit"
@@ -322,9 +325,11 @@ export default function ApplicationsTable({ jobs }) {
 
                 {/* Mobile Actions Button Row */}
                 <div className="flex items-center justify-end gap-2 border-t border-slate-800/80 pt-3">
-                  <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors">
-                    <Eye className="w-3.5 h-3.5" /> View
-                  </button>
+                  <Link href={`/dashboard/applications/${job._id}`}>
+                    <button className="flex items-center gap-1.5 cursor-pointer px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition-colors">
+                      <Eye className="w-3.5 h-3.5" /> View
+                    </button>
+                  </Link>
                   <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 rounded-xl transition-colors">
                     <Edit2 className="w-3.5 h-3.5" /> Edit
                   </button>
