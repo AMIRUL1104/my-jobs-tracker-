@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+import { AddNewJob } from "@/services/server/action";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+
 // PRD অনুযায়ী Dropdown Options (Enum Validation)
 const JOB_TYPE_OPTIONS = [
   "Full-time",
@@ -54,16 +58,22 @@ export default function AddJobPage() {
     },
   });
 
+  const router = useRouter();
   // ফর্ম সাবমিশন লজিক (আপাতত কনসোলে ডাটা দেখাবে)
   const onSubmit = async (data) => {
-    console.log("--- Job Application Data Form ---");
-    console.log(data);
+    // console.log("--- Job Application Data Form ---");
+    // console.log(data);
 
-    // রিয়েল ইউজার এক্সপেরিয়েন্স দেওয়ার জন্য ১ সেকেন্ডের ফেক ডিলে
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    alert("Form submitted successfully! Check browser console for data.");
-    reset(); // সাবমিট শেষে ফর্ম ক্লিয়ার করার জন্য
+    const result = await AddNewJob(data);
+    // console.log(result);
+    if (result.success) {
+      toast.success("Job application added successfully!");
+      //   router.refresh();
+      //   revalidatePath("/dashboard/applications"); // Revalidate the applications page
+      reset(); // সাবমিট শেষে ফর্ম ক্লিয়ার করার জন্য
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (
