@@ -6,8 +6,8 @@ import { LayoutDashboard, Briefcase, PlusCircle, X } from "lucide-react";
 export default function Sidebar({ isOpen, setIsOpen }) {
   const menuItems = [
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { label: "Applications", icon: Briefcase, path: "/applications" },
-    { label: "Add Job", icon: PlusCircle, path: "/applications/add" },
+    { label: "Applications", icon: Briefcase, path: "/dashboard/applications" },
+    { label: "Add Job", icon: PlusCircle, path: "/dashboard/add" },
   ];
 
   return (
