@@ -1,3 +1,5 @@
-export const getStats = async () => {
-  return serverFetch(`/api/stats`);
+import { serverFetch } from "../core/serverFetch";
+
+export const getJobs = async () => {
+  return serverFetch(`/jobs`);
 };
