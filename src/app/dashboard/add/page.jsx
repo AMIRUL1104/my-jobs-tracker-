@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   ArrowLeft,
@@ -10,11 +10,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AddNewJob } from "@/services/server/action";
-import { useRouter } from "next/navigation";
+import { AddNewJob, UpdateJob } from "@/services/server/action"; // UpdateJob ইমপোর্ট করা হলো
+import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams যোগ করা হলো
 import { toast } from "react-toastify";
+import { getJobsById } from "@/services/server/api";
 
-// PRD অনুযায়ী Dropdown Options (Enum Validation)
 const JOB_TYPE_OPTIONS = [
   "Full-time",
   "Part-time",
@@ -37,6 +37,11 @@ const STATUS_OPTIONS = [
 ];
 
 export default function AddJobPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId"); // URL থেকে jobId নেওয়া হচ্ছে
+  const isEditMode = !!jobId; // jobId থাকলে true, না থাকলে false
+
   const {
     register,
     handleSubmit,
@@ -52,27 +57,52 @@ export default function AddJobPage() {
       salary: "",
       jobURL: "",
       companyWebsite: "",
-      appliedDate: new Date().toISOString().split("T")[0], // Default: Today's date
+      appliedDate: new Date().toISOString().split("T")[0],
       status: "Applied",
       notes: "",
     },
   });
 
-  const router = useRouter();
-  // ফর্ম সাবমিশন লজিক (আপাতত কনসোলে ডাটা দেখাবে)
-  const onSubmit = async (data) => {
-    // console.log("--- Job Application Data Form ---");
-    // console.log(data);
+  // যদি Edit Mode হয়, তবে বিদ্যমান ডেটা ফর্মে সেট করার জন্য (API বা Action থেকে ডাটা ফেচ করতে হবে)
+  useEffect(() => {
+    if (isEditMode) {
+      // এখানে আপনার API বা Server Action দিয়ে jobId অনুয়ায়ী ডাটা এনে ফর্মে বসাতে হবে।
+      // উদাহরণস্বরূপ নিচে একটি ডামি ফেচিং মেকানিজম দেখানো হলো:
 
-    const result = await AddNewJob(data);
-    // console.log(result);
-    if (result.success) {
-      toast.success("Job application added successfully!");
-      //   router.refresh();
-      //   revalidatePath("/dashboard/applications"); // Revalidate the applications page
-      reset(); // সাবমিট শেষে ফর্ম ক্লিয়ার করার জন্য
+      const fetchJobDetails = async () => {
+        const response = await getJobsById(jobId); // আপনার কাস্টম ফেচ অ্যাকশন
+        if (response.success) {
+          reset(response.data); // ফর্মে পুরাতন ডাটা সেট করার জন্য
+        }
+      };
+      fetchJobDetails();
+    }
+  }, [isEditMode, jobId, reset]);
+
+  // ফর্ম সাবমিশন লজিক (Add এবং Edit হ্যান্ডেল করবে)
+  const onSubmit = async (data) => {
+    let result;
+
+    if (isEditMode) {
+      // Edit মোডে থাকলে UpdateJob কল হবে
+      result = await UpdateJob(jobId, data);
     } else {
-      toast.error(result.message);
+      // Add মোডে থাকলে AddNewJob কল হবে
+      result = await AddNewJob(data);
+    }
+
+    if (result.success) {
+      toast.success(
+        isEditMode ? "Job updated successfully!" : "Job added successfully!",
+      );
+
+      if (!isEditMode) {
+        reset(); // শুধু নতুন জব অ্যাড হলে ফর্ম ক্লিয়ার হবে
+      }
+      router.push("/dashboard/applications"); // সাবমিট শেষে ড্যাশবোর্ডে রিডাইরেক্ট
+      router.refresh();
+    } else {
+      toast.error(result.message || "Something went wrong!");
     }
   };
 
@@ -89,13 +119,15 @@ export default function AddJobPage() {
         </Link>
       </div>
 
-      {/* Page Header */}
+      {/* Page Header (ডায়নামিক Title ও Description) */}
       <div>
         <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-          Add New Job
+          {isEditMode ? "Edit Job Application" : "Add New Job"}
         </h1>
         <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Keep records of your newly applied job positions.
+          {isEditMode
+            ? "Update the details of your existing job application."
+            : "Keep records of your newly applied job positions."}
         </p>
       </div>
 
@@ -303,10 +335,10 @@ export default function AddJobPage() {
           />
         </div>
 
-        {/* Form Action Buttons */}
+        {/* Form Action Buttons (ডায়নামিক বাটন টেক্সট) */}
         <div className="flex items-center justify-end gap-3 border-t border-slate-800/60 pt-6">
           <Link
-            href="/applications"
+            href="/dashboard/applications"
             className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-colors"
           >
             Cancel
@@ -316,7 +348,11 @@ export default function AddJobPage() {
             disabled={isSubmitting}
             className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white rounded-xl text-sm font-medium transition-colors shadow-lg shadow-blue-600/10 flex items-center gap-2"
           >
-            {isSubmitting ? "Saving..." : "Save Application"}
+            {isSubmitting
+              ? "Saving..."
+              : isEditMode
+                ? "Update Application"
+                : "Save Application"}
           </button>
         </div>
       </form>

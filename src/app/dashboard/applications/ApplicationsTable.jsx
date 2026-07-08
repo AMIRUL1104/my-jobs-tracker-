@@ -261,12 +261,14 @@ export default function ApplicationsTable({ jobs }) {
                             <Eye className="w-4 h-4" />
                           </button>
                         </Link>
-                        <button
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
-                          title="Edit"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
+                        <Link href={`/dashboard/add?jobId=${job._id}`}>
+                          <button
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
+                            title="Edit"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                        </Link>
                         <button
                           className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-800 transition-colors"
                           title="Delete"
