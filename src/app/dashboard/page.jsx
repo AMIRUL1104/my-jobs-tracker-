@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import StatsCard from "@/components/dashboard/StatsCard";
 import StatusChart from "@/components/dashboard/StatusChart";
+import { getStats } from "@/services/server/api";
 
 // সার্ভার-সাইড ডাটা ফেচিং ফাংশন (তোমার ব্যাকএন্ড রেডি হলে এপিআই লিঙ্ক বসাবে)
 async function getDashboardData() {
@@ -48,7 +49,7 @@ async function getDashboardData() {
 }
 
 export default async function DashboardPage() {
-  const data = await getDashboardData();
+  const data = await getStats();
 
   if (!data) {
     return (

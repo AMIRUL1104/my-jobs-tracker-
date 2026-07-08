@@ -6,3 +6,7 @@ export const getJobs = async () => {
 export const getJobsById = async (id) => {
   return serverFetch(`/jobs/${id}`);
 };
+
+export const getStats = async () => {
+  return serverFetch(`/dashboard/stats`);
+};

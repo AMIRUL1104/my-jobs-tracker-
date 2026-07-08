@@ -51,7 +51,7 @@ async function ApplicationDetailsPage({ params }) {
           Job application details not found.
         </p>
         <Link
-          href="/applications"
+          href="/dashboard/applications"
           className="text-sm text-blue-500 hover:underline"
         >
           Back to Applications
@@ -65,7 +65,7 @@ async function ApplicationDetailsPage({ params }) {
       {/* Top Navigation Row */}
       <div className="flex items-center justify-between">
         <Link
-          href="/applications"
+          href="/dashboard/applications"
           className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors group"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
@@ -73,7 +73,7 @@ async function ApplicationDetailsPage({ params }) {
         </Link>
 
         <Link
-          href={`/applications/edit/${id}`}
+          href={`/dashboard/add?jobId=${id}`}
           className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-xl border border-slate-700/50 transition-colors"
         >
           Edit Application

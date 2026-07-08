@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import { AddNewJob, UpdateJob } from "@/services/server/action"; // UpdateJob ইমপোর্ট করা হলো
+import { AddNewJob, updateJob, UpdateJob } from "@/services/server/action"; // UpdateJob ইমপোর্ট করা হলো
 import { useRouter, useSearchParams } from "next/navigation"; // useSearchParams যোগ করা হলো
 import { toast } from "react-toastify";
 import { getJobsById } from "@/services/server/api";
@@ -85,7 +85,7 @@ export default function AddJobPage() {
 
     if (isEditMode) {
       // Edit মোডে থাকলে UpdateJob কল হবে
-      result = await UpdateJob(jobId, data);
+      result = await updateJob(jobId, data);
     } else {
       // Add মোডে থাকলে AddNewJob কল হবে
       result = await AddNewJob(data);
