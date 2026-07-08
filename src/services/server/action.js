@@ -6,7 +6,7 @@ export const AddNewJob = async (data) => {
   return serverMutation("/jobs", data);
 };
 
-export const updateJob = async (id, data) => {
+export const UpdateJob = async (id, data) => {
   return serverMutation(`/jobs/${id}`, data, "PATCH");
 };
 

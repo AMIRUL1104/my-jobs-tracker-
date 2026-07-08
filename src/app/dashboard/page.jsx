@@ -12,42 +12,6 @@ import StatsCard from "@/components/dashboard/StatsCard";
 import StatusChart from "@/components/dashboard/StatusChart";
 import { getStats } from "@/services/server/api";
 
-// সার্ভার-সাইড ডাটা ফেচিং ফাংশন (তোমার ব্যাকএন্ড রেডি হলে এপিআই লিঙ্ক বসাবে)
-async function getDashboardData() {
-  try {
-    // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/stats`, { cache: 'no-store' });
-    // if (!res.ok) throw new Error('Failed to fetch stats');
-    // return res.json();
-
-    // লগিন ছাড়া টেস্ট করার জন্য PRD অনুযায়ী স্ট্যাটিক ডেমো ডাটা
-    return {
-      success: true,
-      stats: {
-        total: 24,
-        wishlist: 4,
-        applied: 8,
-        underReview: 3,
-        interview: 5,
-        offerReceived: 1,
-        accepted: 1,
-        rejected: 2,
-        ghosted: 0,
-      },
-      chartData: [
-        { status: "Wishlist", count: 4 },
-        { status: "Applied", count: 8 },
-        { status: "Review", count: 3 },
-        { status: "Interview", count: 5 },
-        { status: "Offer", count: 1 },
-        { status: "Rejected", count: 2 },
-      ],
-    };
-  } catch (error) {
-    console.error("Fetch dashboard stats error:", error);
-    return null;
-  }
-}
-
 export default async function DashboardPage() {
   const data = await getStats();
 
